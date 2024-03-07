@@ -3,8 +3,8 @@ const catchingErrors = require("../../src/utils/errors/catchingErrors")
 const buildingArrWhere = require("./helpers/buildingArrayWhere")
 //!FALTA PAGINADO
 const getPosts = async (req, res) => {
-  const { size, importance, section, page = 1,quantityResult = 10 } = req.query
-  const offset = (pageNumber - 1) * quantityResult;
+  const { size, importance, section, page = 1,quantityResult = 10,order = "ASC" } = req.query
+  const offset = (page - 1) * quantityResult;
   const where = await buildingArrWhere({size, importance, section})
 
   const arrPost = await Post.findAll({
@@ -16,6 +16,9 @@ const getPosts = async (req, res) => {
     ],
     offset,
     limit:quantityResult,
+    order: [
+      [Importance, 'importance', order],
+    ],
   })
   return res.status(200).json({
     message:"Succesfuly",
