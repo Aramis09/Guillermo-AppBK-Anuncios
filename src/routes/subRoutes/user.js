@@ -1,14 +1,12 @@
 const { Router } = require('express');
-const { createUser }  = require('../../../controllers/user/userController.js');
-const { Dog,Temper } = require('../../db.js');
+const { createUser,loginController }  = require('../../../controllers/user/userController.js');
+const { keySecretVerify } = require('../../middlewares/ketSecretVerify.js');
 const router = Router();
 
 router.post('/', createUser);
 
 
-router.get('/', async (req, res)=>{
-    
-});
+router.post('/login' ,loginController);
 
 
 router.delete('/:id', async (req, res)=>{
