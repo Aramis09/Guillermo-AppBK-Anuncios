@@ -1,6 +1,8 @@
 const { Router } = require('express');
 const user = require('./subRoutes/user.js');
 const posting = require('./subRoutes/posting.js');
+const category = require('./subRoutes/category.js');
+
 const { keySecretVerify } = require('../middlewares/ketSecretVerify.js');
 const verifyToken = require('../middlewares/jwtVerify.js');
 const verificationToken = require('./subRoutes/token.js');
@@ -18,6 +20,8 @@ router.post("/verificationToken",verifyToken,verificationToken)
 
 router.use('/posting', posting);
 router.use('/user', user);
+router.use('/category', category);
+
 
 
 

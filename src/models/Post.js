@@ -11,7 +11,7 @@ module.exports = (sequelize) => {
         },
         title: {
           type: DataTypes.STRING,
-          allowNull: false,
+          allowNull: true,
         },
         description: {
           type: DataTypes.TEXT,
@@ -19,7 +19,7 @@ module.exports = (sequelize) => {
         },
         img: {
           type: DataTypes.TEXT,
-          allowNull: true,
+          allowNull: false,
         },
         number_phone: {
           type: DataTypes.STRING,

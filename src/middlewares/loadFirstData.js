@@ -12,18 +12,15 @@ module.exports = catchingErrors( async (req,res,next) => {
   const arrImportances = await Importance.findAll();
   const userAdminFound = await User.findByPk(1)
   const sectionsFound = await Section.findAll()
-  console.log(arrSizes);
 
   if(!arrSizes.length) {
-    console.log("entre");
-    const result = await Size.bulkCreate([
+     await Size.bulkCreate([
       { size: 1 },
       { size: 2 },
       { size: 3 },
       { size: 4 },
       { size: 5 },
     ]);
-  console.log(result,"<<------------------------");
 
   }
 
@@ -46,14 +43,20 @@ module.exports = catchingErrors( async (req,res,next) => {
   }
 
   if(!userAdminFound){
-
     const salt =  await bcrypt.genSalt(10);
-    const passwordEncrypt =  await bcrypt.hash(!PASSWORD_VALUE ? null : PASSWORD_VALUE, salt);
+    const passwordEncrypt = await bcrypt.hash(!PASSWORD_VALUE ? null : PASSWORD_VALUE, salt);
     
     const newAdmin = await User.create({
       user:!USER_VALUE ? null : USER_VALUE,
       password:passwordEncrypt
     })
+    // res.status(200).json({
+    //   bcrypt,
+    //   PASSWORD_VALUE,
+    //   USER_VALUE,
+    //   passwordEncrypt,
+    //   newAdmin
+    // })
   }
   next()
 })

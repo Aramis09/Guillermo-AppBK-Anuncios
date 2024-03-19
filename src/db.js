@@ -34,7 +34,7 @@ sequelize.models = Object.fromEntries(capsEntries);
 
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
-const { User ,Size, Post, Importance, Category,Section } = sequelize.models;
+const { User ,Size, Post, Importance, Category,Section,Post_category } = sequelize.models;
 
 // Aca vendrian las relaciones
 
@@ -47,8 +47,8 @@ Post.belongsTo(Size)
 Importance.hasMany(Post); 
 Post.belongsTo(Importance)
 
-Category.hasMany(Post); 
-Post.belongsTo(Category)
+Category.belongsToMany(Post,{ through:Post_category }); 
+Post.belongsToMany(Category, { through:Post_category })
 
 Section.hasMany(Post); 
 Post.belongsTo(Section)

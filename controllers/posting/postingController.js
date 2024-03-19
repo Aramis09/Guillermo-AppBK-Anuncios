@@ -1,7 +1,7 @@
 const { User, Post, Size, Importance, Section } = require('../../src/db');
 const catchingErrors = require("../../src/utils/errors/catchingErrors")
 const buildingArrWhere = require("./helpers/buildingArrayWhere")
-//!FALTA PAGINADO
+
 const getPosts = async (req, res) => {
   const { size, importance, section, page = 1,quantityResult = 10,order = "ASC" } = req.query
   const offset = (page - 1) * quantityResult;
