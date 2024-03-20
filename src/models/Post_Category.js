@@ -9,10 +9,6 @@ module.exports = (sequelize) => {
             allowNull: false,
             autoIncrement: true,
         },
-        name: {
-          type: DataTypes.STRING,
-          allowNull: false,
-      },
     },
     {
       timestamps: false, // sacamos las dos ultimas columnas que muestran las fechas y hora modificaciones 
