@@ -3,10 +3,7 @@ const { createCategory } = require('../../../controllers/category/categoryContro
 const router = Router();
 
 
-// router.get('/',getPosts);
 router.post('/',createCategory);
-// router.put('/',editPost);
-// router.delete('/',deletePost);
 
 
 module.exports = router;

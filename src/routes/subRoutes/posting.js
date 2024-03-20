@@ -1,10 +1,10 @@
 const { Router } = require('express');
-const { getPostsByDetail, createPost, getPosts ,editPost, deletePost } = require('../../../controllers/posting/postingController');
+const { getPostsByCategories, createPost, getPosts ,editPost, deletePost } = require('../../../controllers/posting/postingController');
 const router = Router();
 
 
 router.get('/',getPosts);
-router.get('/getListFiltered',getPostsByDetail);
+router.get('/getListFiltered',getPostsByCategories);
 
 router.post('/',createPost);
 router.put('/',editPost);

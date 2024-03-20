@@ -1,5 +1,5 @@
 const { Op } = require('sequelize');
-const { Sequelize, query } = require('sequelize');
+const { Sequelize, query,literal } = require('sequelize');
 
 const { User, Post, Size, Importance, Section, Category, Post_category } = require('../../src/db');
 const catchingErrors = require("../../src/utils/errors/catchingErrors")
@@ -34,25 +34,57 @@ const getPosts = async (req, res) => {
   })
 }
 
-const getPostsByDetail = async (req, res) => {
-  const { categories, size, importance, section, page = 1,quantityResult = 10,order = "ASC" } = req.query
+const getPostsByCategories = async (req, res) => {
+  const { size, importance, section, page = 1,quantityResult = 10,order = "ASC" } = req.query
+  const { categories } = req.body
   const offset = (page - 1) * quantityResult;
   const where = await buildingArrWhere({size, importance, section})
-  // const categoriesFoundIds = await (await Category.findAll({
+  const arrIdsCategories = (await Category.findAll({
+    where:{
+      name:{
+        [Op.in]:[...categories]
+      }
+    }
+  })).map(c => c.id)
+
+  const anunciosIds = await Post.findAll({
+    attributes: ['id'],
+    include: [{
+      model: Category,
+      through: {
+        model: Post_category,
+        attributes: [] // No necesitamos recuperar ningún atributo de la tabla intermedia
+      },
+      where: {
+        id: {
+          [Op.in]: [...arrIdsCategories]
+        }
+      }
+    }],
+    group: 'Post.id',
+    having: literal('COUNT(DISTINCT "categories"."id") = 2') // Asegura que el anuncio tenga exactamente dos categorías distintas
+  });
+
+  // // Busca los anuncios completos según los IDs obtenidos anteriormente
+  // const arrPost = await Post.findAll({
   //   where: {
-  //     name: {
-  //       [Op.in]: categories
+  //     id: {
+  //       [Op.in]: anunciosIds.map(anuncio => anuncio.id)
   //     }
   //   }
-  // })).map( objCat => objCat.id)
-  
-  const anunciosIds = query()
- 
-  res.status(200).json({
-    s:"ok",
-    anunciosIds
+  // });
+
+  return res.status(200).json({
+    // message:"Succesfuly",
+    // pages:Math.ceil(count/quantityResult),
+    // nextPage: Number(page) + 1,
+    // prevPage:Number(page) - 1,
+    // currentPage:Number(page),
+    data:anunciosIds,
+    msg:"asd"
   })
 }
+
 
 
 const createPost = async (req, res) => {
@@ -145,6 +177,6 @@ module.exports = {
   deletePost: catchingErrors(deletePost),
   editPost: catchingErrors(editPost),
   getPosts: catchingErrors(getPosts),
-  getPostsByDetail: catchingErrors(getPostsByDetail)
+  getPostsByCategories: catchingErrors(getPostsByCategories)
 
 }
