@@ -12,6 +12,17 @@ const createCategory = async (req, res) => {
 }
 
 
+const getCategory = async (req, res) => {
+
+    const  list = await Category.findAll()
+    res.status(200).json({
+        message:"it was created",
+        data:list,
+    })
+}
+
 module.exports = {
-    createCategory:catchingErrors(createCategory)
+    createCategory:catchingErrors(createCategory),
+    getCategory:catchingErrors(getCategory)
+
 }
