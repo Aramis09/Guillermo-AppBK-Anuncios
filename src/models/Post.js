@@ -17,8 +17,16 @@ module.exports = (sequelize) => {
           type: DataTypes.TEXT,
           allowNull: false,
         },
+        expire:{
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        deleted:{
+          type: DataTypes.BOOLEAN,
+          allowNull: false,
+        }
     },
     {
-      timestamps: false, // sacamos las dos ultimas columnas que muestran las fechas y hora modificaciones 
+      timestamps: true, // sacamos las dos ultimas columnas que muestran las fechas y hora modificaciones 
   });
 };

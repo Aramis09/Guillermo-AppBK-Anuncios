@@ -1,15 +1,15 @@
 const { Op } = require("sequelize");
-const { Sequelize, query, literal } = require("sequelize");
+// const { Sequelize, query, literal } = require("sequelize");
 
 const {
-	User,
+	// User,
 	Post,
 	Size,
 	Importance,
 	Section,
 	Category,
 	Post_category,
-	Contact,
+	// Contact,
 } = require("../../src/db");
 const catchingErrors = require("../../src/utils/errors/catchingErrors");
 const buildingArrWhere = require("./helpers/buildingArrayWhere");
@@ -53,13 +53,12 @@ const getPostsByCategories = async (req, res) => {
 		section,
 		page = 1,
 		quantityResult = 10,
-		order = "ASC",
+		// order = "ASC",
 		categories,
 	} = req.query;
-	const offset = (page - 1) * quantityResult;
-	const where = await buildingArrWhere({ size, importance, section });
+	// const offset = (page - 1) * quantityResult;
+	// const where = await buildingArrWhere({ size, importance, section });
 	const CTGlBJ = JSON.parse(categories);
-	console.log(CTGlBJ[0], typeof CTGlBJ, "<<<<-----");
 	const arrIdsCategories = (
 		await Category.findAll({
 			where: {
@@ -88,6 +87,7 @@ const getPostsByCategories = async (req, res) => {
 			{ model: Importance },
 			{ model: Section },
 		],
+	
 	});
 
 	return res.status(200).json({
@@ -101,88 +101,11 @@ const getPostsByCategories = async (req, res) => {
 	});
 };
 
-const createPost = async (req, res) => {
-	const { idUser = 1 } = req.query;
-	const { contactType, categories, size, importance, section } = req.body;
-
-	//!add post to user
-	const uniqueUserExisting = await User.findByPk(idUser);
-	const newPost = await uniqueUserExisting.createPost(req.body);
-	//!add post to size
-	const sizeFound = await Size.findByPk(size);
-	await sizeFound.addPost(newPost);
-	//!add post to Importance
-	const importanceFound = await Importance.findOne({
-		where: {
-			importance: importance,
-		},
-	});
-	await importanceFound.addPost(newPost);
-	//!add post to list of categories
-	const categoriesFoundIds = await (
-		await Category.findAll({
-			where: {
-				name: {
-					[Op.in]: categories,
-				},
-			},
-		})
-	).map((objCat) => objCat.id);
-	const bulkObjToCreate = categoriesFoundIds.map((categoryId) => ({
-		postId: newPost.id,
-		categoryId,
-	}));
-	const ver = await Post_category.bulkCreate(bulkObjToCreate);
-	//!add post to section.
-	if (
-		section === "Events" ||
-    section === "Main" ||
-    section === "Useful Information"
-	) {
-		const sectionFound = await Section.findOne({
-			where: {
-				name: section,
-			},
-		});
-		await sectionFound.addPost(newPost);
-	}
-	//!add post to contact type
-	const contactFound = await Contact.findByPk(contactType);
-	if (contactFound) {
-		await contactFound.addPost(newPost);
-	}
-
-	return res.status(200).json({
-		message: "The posst was created",
-		ver,
-		bulkObjToCreate,
-	});
-};
-
-
-
-
-
-
-
-const deletePost = async (req, res) => {
-	const { idPost = 1 } = req.query;
-
-	await Post.destroy({
-		where: {
-			id: idPost,
-		},
-	});
-
-	return res.status(200).json({
-		message: "The post was delete",
-	});
-};
-
 module.exports = {
-	createPost: catchingErrors(createPost),
-	deletePost: catchingErrors(deletePost),
+	createPost: catchingErrors(require("./createPost/createPostController")),
+	deletePost: catchingErrors(require("./deletePost/deletePostController")),
 	editPost: catchingErrors(require("./editPost/editPostController")),
 	getPosts: catchingErrors(getPosts),
 	getPostsByCategories: catchingErrors(getPostsByCategories),
+	timerDeletePostExpired:catchingErrors(require("./timerDeletePost/timerDeletePostController"))
 };

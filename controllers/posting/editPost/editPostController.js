@@ -90,7 +90,6 @@ const editPost = async (req, res) => {
 		await Post_category.bulkCreate(bulkObjToAddCategories)
 		await postFound.save();
 		
-		console.log(bulkObjToAddCategories,newCategoriesIds,categories);
 
 	return res.status(200).json({
 		message: "The post was update",

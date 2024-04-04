@@ -3,7 +3,6 @@ const catchingErrors = require("../../src/utils/errors/catchingErrors");
 
 const createCategory = async (req, res) => {
   const { categories } = req.body;
-  console.log(categories, "<<<<----");
   const arrCategoriesFormated = categories.map((category) => ({
     name: category,
   }));

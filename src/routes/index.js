@@ -4,6 +4,7 @@ const posting = require("./subRoutes/posting.js");
 const section = require("./subRoutes/sections.js");
 const category = require("./subRoutes/category.js");
 const contact = require("./subRoutes/contact.js");
+const cloudinary = require("./subRoutes/cloudinary.js");
 
 const { keySecretVerify } = require("../middlewares/ketSecretVerify.js");
 const verifyToken = require("../middlewares/jwtVerify.js");
@@ -23,5 +24,6 @@ router.use("/section", section);
 router.use("/contact", contact);
 router.use("/user", user);
 router.use("/category", category);
+router.use("/cloudinary", cloudinary);
 
 module.exports = router;
