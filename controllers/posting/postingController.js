@@ -53,11 +53,11 @@ const getPostsByCategories = async (req, res) => {
 		section,
 		page = 1,
 		quantityResult = 10,
-		// order = "ASC",
+		order = "ASC",
 		categories,
 	} = req.query;
-	// const offset = (page - 1) * quantityResult;
-	// const where = await buildingArrWhere({ size, importance, section });
+	const offset = (page - 1) * quantityResult;
+	const where = await buildingArrWhere({ size, importance, section });
 	const CTGlBJ = JSON.parse(categories);
 	const arrIdsCategories = (
 		await Category.findAll({
@@ -70,6 +70,9 @@ const getPostsByCategories = async (req, res) => {
 	).map((c) => c.id);
 
 	const { count, rows: postsFound } = await Post.findAndCountAll({
+		where,
+		offset,
+		limit:quantityResult,
 		include: [
 			{
 				model: Category,
@@ -87,7 +90,10 @@ const getPostsByCategories = async (req, res) => {
 			{ model: Importance },
 			{ model: Section },
 		],
-	
+		order: [
+			[Importance, "importance", order],
+			[Size, "size", "DESC"],
+		],
 	});
 
 	return res.status(200).json({

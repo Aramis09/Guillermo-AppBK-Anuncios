@@ -55,7 +55,7 @@ module.exports = catchingErrors(async (req, res, next) => {
 			salt
 		);
 
-		const newAdmin = await User.create({
+		await User.create({
 			user: !USER_VALUE ? null : USER_VALUE,
 			password: passwordEncrypt,
 		});

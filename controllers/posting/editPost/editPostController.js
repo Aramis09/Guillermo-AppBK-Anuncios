@@ -12,9 +12,8 @@ const { Op } = require("sequelize")
 
 
 const editPost = async (req, res) => {
-	const { idPost = 1 } = req.query;
-	const { size, importance, img, section,contactType ,categories, contactValue } = req.body;
-	const postFound = await Post.findByPk(idPost);
+	const { id, size, importance, img, section, contactType, categories, contactValue } = req.body;
+	const postFound = await Post.findByPk(id);
 	if (!postFound) {
 		return res.status(404).json({
 			message: "not found post",
@@ -22,6 +21,7 @@ const editPost = async (req, res) => {
 	}
 	postFound.img = img ? img : postFound.img;
 	postFound.contactValue = contactValue ? contactValue : postFound.contactValue;
+	await postFound.save()
 	if (importance) {
 		const importanceFoundId = await Importance.findOne({
 			attributes: ["id"],
@@ -31,7 +31,7 @@ const editPost = async (req, res) => {
 		});
 		if (importanceFoundId) postFound.importanceId = importanceFoundId.id;
 	}
-	
+
 	if (size) {
 		const sizeFoundId = await Size.findOne({
 			attributes: ["id"],
@@ -41,7 +41,7 @@ const editPost = async (req, res) => {
 		});
 		if (sizeFoundId) postFound.sizeId = sizeFoundId.id;
 	}
-	
+
 	if (section) {
 		const sectionFoundId = await Section.findOne({
 			attributes: ["id"],
@@ -51,8 +51,8 @@ const editPost = async (req, res) => {
 		});
 		if (sectionFoundId) postFound.sectionId = sectionFoundId.id;
 	}
-	
-	
+
+
 	if (contactType) {
 		const contactTypeId = await Contact.findOne({ //! solo tiene un campo, por eso no traigo el id
 			where: {
@@ -63,33 +63,44 @@ const editPost = async (req, res) => {
 	}
 
 	//! Actualizar categorias inicio.
-	const newCategoriesIds = (await Category.findAll({
-		attributes:["id"],
-		where:{
-			name:{
-				[Op.in]:[...categories]
+	let newCategoriesIds = (await Category.findAll({
+		attributes: ["id"],
+		where: {
+			name: {
+				[Op.in]: [...categories]
 			}
 		}
-	})).map(obj =>obj.id)
+	})).map(obj => obj.id)
 
 	const post_categoryFound = await Post_category.findAll({
-		where:{
-			postId:postFound.id
+		where: {
+			postId: postFound.id
 		}
 	})
+	const idsToRemoveFromNewCategoriesToCreate = []
+	for (let i = 0; i < newCategoriesIds.length; i++) {
+		//!el if si elimina las categorias viejas no necesarias.
+		if (post_categoryFound[i] && !newCategoriesIds.includes(post_categoryFound[i]["categoryId"])) {
 
-	//!el for elimin las categorias no necesarias.
-	for(let i = 0 ; i < post_categoryFound.length ; i++) {
-		if(!newCategoriesIds.includes(post_categoryFound[i]["categoryId"])){
-			post_categoryFound[i]["categoryId"] = null
-					await post_categoryFound[i].save()
-			}
+			const idToDelete = post_categoryFound[i]["categoryId"]
+			await Post_category.destroy({
+				where: {
+					"categoryId": idToDelete
+				}
+			})
+
+		}
+		if (post_categoryFound[i] && newCategoriesIds.includes(post_categoryFound[i]["categoryId"])) {
+			const idToDelete = post_categoryFound[i]["categoryId"]
+			idsToRemoveFromNewCategoriesToCreate.push(idToDelete)
+
+		}
 	}
-		//! Actualizar categorias fin (faltan cosas).
-		const bulkObjToAddCategories = newCategoriesIds.map(cat => ({ postId:postFound.id,categoryId:cat }))
-		await Post_category.bulkCreate(bulkObjToAddCategories)
-		await postFound.save();
-		
+	// 	//! Actualizar categorias fin (faltan cosas).
+	const bulkObjToAddCategories = newCategoriesIds.filter(catId => (!idsToRemoveFromNewCategoriesToCreate.includes(catId))).map(cat => ({ postId: postFound.id, categoryId: cat }))
+	await Post_category.bulkCreate(bulkObjToAddCategories)
+	await postFound.save();
+
 
 	return res.status(200).json({
 		message: "The post was update",
