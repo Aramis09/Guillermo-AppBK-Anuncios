@@ -21,6 +21,7 @@ server.use(cors({
   credentials: true,
   methods: 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
   exposedHeaders: ['Content-Length', 'Content-Type', 'Cache-Control', 'Last-Modified', 'ETag', 'Authorization', 'Location', 'Set-Cookie', 'X-Requested-With', 'Access-Control-Allow-Origin']
+
 }));
 
 
