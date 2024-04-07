@@ -18,7 +18,7 @@ server.use(cookieParser());
 server.use(morgan('dev'));
 const origins = ["https://client-unse-project.vercel.app","http://localhost:5173" ]
 server.use(cors({
-  origin:origins[1],
+  origin: process.env.CLIENT_DOMAIN || origins[1],
   credentials:true
 }));
 
