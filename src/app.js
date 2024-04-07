@@ -17,7 +17,7 @@ server.use(cookieParser());
 server.use(morgan('dev'));
 const origins = ["https://client-unse-project.vercel.app","http://localhost:5173", "https://fp17v6p5-5173.brs.devtunnels.ms"]
 server.use(cors({
-  origin: origins[1],
+  origin: process.env.CLIENT_DOMAIN || origins[1],
   credentials: true,
   methods: 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
   exposedHeaders: ['Content-Length', 'Content-Type', 'Cache-Control', 'Last-Modified', 'ETag', 'Authorization', 'Location', 'Set-Cookie', 'X-Requested-With', 'Access-Control-Allow-Origin']
