@@ -9,32 +9,24 @@ module.exports = (sequelize) => {
           autoIncrement: true,
           allowNull: false,
         },
-        title: {
-          type: DataTypes.STRING,
-          allowNull: true,
-        },
-        description: {
-          type: DataTypes.TEXT,
-          allowNull: true,
-        },
         img: {
           type: DataTypes.TEXT,
           allowNull: false,
         },
-        number_phone: {
-          type: DataTypes.STRING,
-          allowNull: true,
+        contactValue: {
+          type: DataTypes.TEXT,
+          allowNull: false,
         },
-        personal_page: {
+        expire:{
           type: DataTypes.STRING,
-          allowNull: true,
+          allowNull: false,
         },
-        location: {
-          type: DataTypes.STRING,
-          allowNull: true,
-        },
+        deleted:{
+          type: DataTypes.BOOLEAN,
+          allowNull: false,
+        }
     },
     {
-      timestamps: false, // sacamos las dos ultimas columnas que muestran las fechas y hora modificaciones 
+      timestamps: true, // sacamos las dos ultimas columnas que muestran las fechas y hora modificaciones 
   });
 };

@@ -1,13 +1,14 @@
 const { DataTypes } = require('sequelize');
-
 module.exports = (sequelize) => {
     // defino el modelo
-    sequelize.define('post_category', {
-        id:{
-            type: DataTypes.INTEGER,
+    sequelize.define('contact', {
+        type: {
             primaryKey: true,
+            type: DataTypes.STRING,
             allowNull: false,
-            autoIncrement: true,
+            validate: {
+            isIn: [["whatsapp","personal-page","direct-phone","none"]] // Esto asegura que el valor esté en el arreglo [1, 2, 3]
+            }
         },
     },
     {
