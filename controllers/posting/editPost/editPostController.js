@@ -12,7 +12,7 @@ const { Op } = require("sequelize")
 
 
 const editPost = async (req, res) => {
-	const { id, size, importance, img, section, contactType, categories, contactValue } = req.body;
+	const { id,owner ,size, importance, img, section, contactType, categories, contactValue } = req.body;
 	const postFound = await Post.findByPk(id);
 	if (!postFound) {
 		return res.status(404).json({
@@ -20,6 +20,8 @@ const editPost = async (req, res) => {
 		});
 	}
 	postFound.img = img ? img : postFound.img;
+	postFound.owner = owner ? owner : postFound.owner;
+
 	postFound.contactValue = contactValue ? contactValue : postFound.contactValue;
 	await postFound.save()
 	if (importance) {

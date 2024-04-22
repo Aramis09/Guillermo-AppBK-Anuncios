@@ -9,6 +9,10 @@ module.exports = (sequelize) => {
           autoIncrement: true,
           allowNull: false,
         },
+        owner: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
         img: {
           type: DataTypes.TEXT,
           allowNull: false,
