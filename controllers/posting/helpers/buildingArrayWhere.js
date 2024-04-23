@@ -3,7 +3,7 @@ const { Size, Importance, Section } = require('../../../src/db');
 
 const buildingArrWhere = async ({ size, importance, section  }) => {
   let where = {
- 
+    deleted:false
   }
 
   if(size) {

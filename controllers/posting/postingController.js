@@ -107,11 +107,55 @@ const getPostsByCategories = async (req, res) => {
 	});
 };
 
+
+const getPostDetail = async (req, res) => {
+	const { id } = req.query
+	console.log(id);
+	const postFound = await Post.findByPk(id,{
+		include:[{model:Category},{model:Section},{model:Importance},{model:Size}]
+	})
+	if(!postFound) return res.status(404).send({
+		data:null,
+		msg:"No found post"
+	})
+
+	res.status(200).send({
+		data:postFound
+	})
+};
+
+const getPostByOwner = async (req, res) => {
+	const { owner } = req.query
+	console.log(owner);
+	const postsFound = await Post.findAll({
+		include:[{model:Category},{model:Section},{model:Importance},{model:Size}],
+		where:{
+			owner:{
+				[Op.iLike]:`%${owner}%`
+			}
+		}
+	})
+
+	if(!postsFound) return res.status(404).send({
+		data:null,
+		msg:"Not found"
+	})
+
+	return res.status(200).send({
+		data:postsFound
+	})
+
+};
+
+
+
 module.exports = {
 	createPost: catchingErrors(require("./createPost/createPostController")),
 	deletePost: catchingErrors(require("./deletePost/deletePostController")),
 	editPost: catchingErrors(require("./editPost/editPostController")),
 	getPosts: catchingErrors(getPosts),
 	getPostsByCategories: catchingErrors(getPostsByCategories),
-	timerDeletePostExpired:catchingErrors(require("./timerDeletePost/timerDeletePostController"))
+	timerDeletePostExpired:catchingErrors(require("./timerDeletePost/timerDeletePostController")),
+	getPostDetail: catchingErrors(getPostDetail),
+	getPostByOwner: catchingErrors(getPostByOwner)
 };

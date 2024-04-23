@@ -12,15 +12,19 @@ const { Op } = require("sequelize")
 
 
 const editPost = async (req, res) => {
-	const { id,owner ,size, importance, img, section, contactType, categories, contactValue } = req.body;
+	const { id,expire,owner ,size, importance, img, section, contactType, categories, contactValue } = req.body;
 	const postFound = await Post.findByPk(id);
 	if (!postFound) {
 		return res.status(404).json({
 			message: "not found post",
 		});
 	}
+
+	
+	
 	postFound.img = img ? img : postFound.img;
 	postFound.owner = owner ? owner : postFound.owner;
+	postFound.expire = expire ? expire : postFound.expire;
 
 	postFound.contactValue = contactValue ? contactValue : postFound.contactValue;
 	await postFound.save()
