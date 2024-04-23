@@ -17,7 +17,7 @@ server.use(cookieParser());
 server.use(morgan('dev'));
 const origins = ["https://client-unse-project.vercel.app","http://localhost:5173", "https://guillermo-example.netlify.app"]
 server.use(cors({
-  origin: origins[1],
+  origin: origins[2],
   credentials: true,
   methods: 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
   exposedHeaders: ['Content-Length', 'Content-Type', 'Cache-Control', 'Last-Modified', 'ETag', 'Authorization', 'Location', 'Set-Cookie', 'X-Requested-With', 'Access-Control-Allow-Origin']
