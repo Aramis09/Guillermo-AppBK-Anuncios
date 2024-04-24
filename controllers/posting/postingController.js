@@ -58,7 +58,6 @@ const getPostsByCategories = async (req, res) => {
 	} = req.query;
 	const offset = (page - 1) * quantityResult;
 	const where = await buildingArrWhere({ size, importance, section });
-	const CTGlBJ = JSON.parse(categories);
 	const arrIdsCategories = (
 		await Category.findAll({
 			where: {
@@ -103,7 +102,6 @@ const getPostsByCategories = async (req, res) => {
 		prevPage: Number(page) - 1,
 		currentPage: Number(page),
 		data: postsFound,
-		CTGlBJ,
 	});
 };
 
