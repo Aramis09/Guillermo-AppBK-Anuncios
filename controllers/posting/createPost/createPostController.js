@@ -12,11 +12,11 @@ const { Op } = require("sequelize");
 
 const createPost = async (req, res) => {
 	const { idUser = 1 } = req.query;
-	const { contactType, categories, size, importance, section, expire = "2024/4/1",deleted = false } = req.body;
-	
+	const { contactType, categories, size, importance, section, expire = "2024-4-1",deleted = false } = req.body;
+	console.log(req.body.expire);
 	//!add post to user
 	const uniqueUserExisting = await User.findByPk(idUser);
-	const newPost = await uniqueUserExisting.createPost({...req.body,expire,deleted});
+	const newPost = await uniqueUserExisting.createPost({...req.body,expire:new Date(expire),deleted});
 	//!add post to size
 	const sizeFound = await Size.findByPk(size);
 	await sizeFound.addPost(newPost);
@@ -60,8 +60,6 @@ const createPost = async (req, res) => {
 	if (contactFound) {
 		await contactFound.addPost(newPost);
 	}
-
-//! create expire time
 
 	return res.status(200).json({
 		message: "The posst was created",

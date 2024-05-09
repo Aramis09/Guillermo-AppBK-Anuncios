@@ -15,9 +15,9 @@ server.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 server.use(bodyParser.json({ limit: '50mb' }));
 server.use(cookieParser());
 server.use(morgan('dev'));
-const origins = ["https://client-unse-project.vercel.app","http://localhost:5173", "https://guillermo-example.netlify.app"]
+const origins = [process.env.CLIENT_DOMAIN,"http://localhost:5173", "https://guillermo-example.netlify.app"]
 server.use(cors({
-  origin: origins[2],
+  origin: origins[0],
   credentials: true,
   methods: 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
   exposedHeaders: ['Content-Length', 'Content-Type', 'Cache-Control', 'Last-Modified', 'ETag', 'Authorization', 'Location', 'Set-Cookie', 'X-Requested-With', 'Access-Control-Allow-Origin']

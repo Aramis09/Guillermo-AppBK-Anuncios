@@ -23,9 +23,11 @@ const getPosts = async (req, res) => {
 		quantityResult = 10,
 		order = "ASC",
 	} = req.query;
+
+	console.log(req.query);
 	const offset = (page - 1) * quantityResult;
 	const where = await buildingArrWhere({ size, importance, section });
-
+	console.log(where);
 	const { count, rows: arrPost } = await Post.findAndCountAll({
 		where,
 		include: [{ model: Size }, { model: Importance }, { model: Section }],
@@ -36,6 +38,8 @@ const getPosts = async (req, res) => {
 			[Size, "size", "DESC"],
 		],
 	});
+
+	console.log(arrPost.length);
 	return res.status(200).json({
 		message: "Succesfuly",
 		pages: Math.ceil(count / quantityResult),
