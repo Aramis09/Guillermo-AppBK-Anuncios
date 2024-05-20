@@ -35,16 +35,17 @@ module.exports = catchingErrors(async (req, res, next) => {
 		await Section.bulkCreate([
 			{ name: "Events" },
 			{ name: "Main" },
-			{ name: "Useful Information" },
+			{ name: "Useful Information" }
 		]);
 	}
 
 	if (!contactsFound.length) {
 		await Contact.bulkCreate([
-			{ type: "whatsapp" },
-			{ type: "personal-page" },
-			{ type: "direct-phone" },
-			{ type: "none" },
+			{ type: "Whatsapp" },
+			{ type: "Pagina personal" },
+			{ type: "Telefono directo" },
+			{ type: "Correo" },
+			{ type: "Ninguno" },
 		]);
 	}
 

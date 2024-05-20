@@ -27,7 +27,6 @@ const getPosts = async (req, res) => {
 	console.log(req.query);
 	const offset = (page - 1) * quantityResult;
 	const where = await buildingArrWhere({ size, importance, section });
-	console.log(where);
 	const { count, rows: arrPost } = await Post.findAndCountAll({
 		where,
 		include: [{ model: Size }, { model: Importance }, { model: Section }],
@@ -39,7 +38,6 @@ const getPosts = async (req, res) => {
 		],
 	});
 
-	console.log(arrPost.length);
 	return res.status(200).json({
 		message: "Succesfuly",
 		pages: Math.ceil(count / quantityResult),
@@ -112,7 +110,6 @@ const getPostsByCategories = async (req, res) => {
 
 const getPostDetail = async (req, res) => {
 	const { id } = req.query
-	console.log(id);
 	const postFound = await Post.findByPk(id,{
 		include:[{model:Category},{model:Section},{model:Importance},{model:Size}]
 	})
@@ -128,7 +125,6 @@ const getPostDetail = async (req, res) => {
 
 const getPostByOwner = async (req, res) => {
 	const { owner } = req.query
-	console.log(owner);
 	const postsFound = await Post.findAll({
 		include:[{model:Category},{model:Section},{model:Importance},{model:Size}],
 		where:{
