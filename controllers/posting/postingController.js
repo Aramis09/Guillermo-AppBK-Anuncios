@@ -52,14 +52,14 @@ const getPostsByCategories = async (req, res) => {
 	const {
 		size,
 		importance,
-		section,
+		// section,
 		page = 1,
 		quantityResult = 10,
 		order = "ASC",
 		categories,
 	} = req.query;
 	const offset = (page - 1) * quantityResult;
-	const where = await buildingArrWhere({ size, importance, section });
+	const where = await buildingArrWhere({ size, importance });
 	const arrIdsCategories = (
 		await Category.findAll({
 			where: {
