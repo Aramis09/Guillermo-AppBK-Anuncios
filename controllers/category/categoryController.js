@@ -23,7 +23,23 @@ const getCategory = async (req, res) => {
   });
 };
 
+const deleteCategory = async (req, res) => {
+  const { name } = req.body
+  const list = await Category.destroy({
+    where:{
+      name
+    }
+  });
+  res.status(200).json({
+    message: "it was created",
+    data: list,
+  });
+};
+
+
 module.exports = {
   createCategory: catchingErrors(createCategory),
   getCategory: catchingErrors(getCategory),
+  deleteCategory: catchingErrors(deleteCategory),
+
 };
