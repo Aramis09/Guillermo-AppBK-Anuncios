@@ -44,9 +44,9 @@ const createPost = async (req, res) => {
 	const ver = await Post_category.bulkCreate(bulkObjToCreateCategories);
 	//!add post to section.
 	if (
-		section === "Events" ||
-    section === "Main" ||
-    section === "Useful Information"
+		section === "Eventos" ||
+    section === "Principal" ||
+    section === "Informacion Util"
 	) {
 		const sectionFound = await Section.findOne({
 			where: {

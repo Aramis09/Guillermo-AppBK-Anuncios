@@ -33,9 +33,9 @@ module.exports = catchingErrors(async (req, res, next) => {
 
 	if (!sectionsFound.length) {
 		await Section.bulkCreate([
-			{ name: "Events" },
-			{ name: "Main" },
-			{ name: "Useful Information" }
+			{ name: "Eventos" },
+			{ name: "Principal" },
+			{ name: "Informacion Util" }
 		]);
 	}
 
