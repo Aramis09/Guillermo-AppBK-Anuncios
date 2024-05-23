@@ -14,7 +14,9 @@ const createCategory = async (req, res) => {
 };
 
 const getCategory = async (req, res) => {
-  const list = await Category.findAll();
+  const list = await Category.findAll({
+    order:[["name","ASC"]]
+  });
   res.status(200).json({
     message: "it was created",
     data: list,
